@@ -1,0 +1,11 @@
+Cache-Control: private
+Content-Type: text/html; charset=utf-8
+Content-Encoding: gzip
+Vary: Accept-Encoding
+Server: Microsoft-IIS/8.5
+X-Aspnetmvc-Version: 5.1
+X-Aspnet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Mon, 29 Jun 2020 15:02:07 GMT
+Via: 1.1 google
+Alt-Svc: clear
