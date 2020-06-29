@@ -28,6 +28,13 @@ async function getFlights(org, dept, deptDt, arrDt) {
     return data;
 }
 
-getFlights("DEL", "BOM", "2020-07-07", null).then(data => {
-    console.log(data);
-});
+// function main() {
+    // var result;
+    getFlights("DEL", "BOM", "2020-07-07", null).then(data => {
+        console.log(data);
+        // result = data;
+    });
+    // return result
+// }
+
+// console.log(main());
