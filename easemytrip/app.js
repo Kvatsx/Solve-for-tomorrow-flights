@@ -3,6 +3,7 @@ const MongoClient = require('mongodb').MongoClient
 const DB=require('./config.json').DB
 const fs = require('fs');
 const app=require('express')();
+const PORT = process.env.PORT || 2345
 
 let flightcollection=null;
 
@@ -106,7 +107,7 @@ app.get('/',function(req,res){
     res.send('Hey there!')
 })
 
-app.listen(2345, ()=>{
+app.listen(PORT, ()=>{
     console.log('Connected to node server');
     
 })
