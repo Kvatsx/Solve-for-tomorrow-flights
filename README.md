@@ -1,4 +1,4 @@
-# Solve-for-tomorrow-flights
+# Solve-for-tomorrow-flights 🚀️ 
 
 ## Flask Server Setup
 
@@ -9,11 +9,12 @@
 * `export FLASK_APP=api` && `flask run` - run the web server [If on Windows - use `set` instead of `export`]
 * `pip install Flask-PyMongo dnspython` - Somehow Flask-Pymongo even with pipenv installed not working.
 
-## Features
+## Features 🎉️ 
 
 * [X] Highly Maintainable
 * [X] Scalable
-* [X] ModularMicroservice Based Architecture
+* [X] Modular
+* [X] Microservice Based Architecture
 * [X] Easily Testable
 * [X] Loosely coupled
 * [X] Independently deployable
