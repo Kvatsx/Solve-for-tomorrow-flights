@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
-const MongoClient = require('mongodb').MongoClient
-const DB=require('./config.json').DB
+// const MongoClient = require('mongodb').MongoClient
+// const DB=require('./config.json').DB
 const fs = require('fs');
 const app=require('express')();
 const bodyParser=require('body-parser');
@@ -86,21 +86,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
     
 app.post('/getFlights',function(req,res){
-    MongoClient.connect(DB.URI, function(err,db){
-    if(err)
-        throw err;
+    // MongoClient.connect(DB.URI, function(err,db){
+    // if(err)
+    //     throw err;
 
-    flightcollection=db.db('test').collection('easemytrip_node');
+    // flightcollection=db.db('test').collection('easemytrip_node');
     getFlights(req.body).then(function(data){
         let docs= showRelevantInfo(data);
-        flightcollection.insertMany(docs).then(result=>{
-            console.log("Saved to DB!");
-            res.send("Result saved in DB!");
-        }).catch(err=>{
-            res.send(err);
-        });
+        res.send(docs);
+    
+
+        // flightcollection.insertMany(docs).then(result=>{
+        //     console.log("Saved to DB!");
+        //     res.send("Result saved in DB!");
+        // }).catch(err=>{
+        //     res.send(err);
+        // });
     })
-    })  
+    // })  
 })
 
 app.get('/',function(req,res){
