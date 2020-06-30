@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const fs = require('fs');
 
-async function getFlights(org, dept, deptDt, arrDt) {
+async function getFlights() {
 
     let response = await fetch("https://flightservice.easemytrip.com/EmtAppService/AirAvail_Lights/AirSearchLightFromCloud", {
         "headers": {
