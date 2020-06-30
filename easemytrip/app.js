@@ -3,12 +3,12 @@ const MongoClient = require('mongodb').MongoClient
 const DB=require('./config.json').DB
 const fs = require('fs');
 const app=require('express')();
+const bodyParser=require('body-parser');
 const PORT = process.env.PORT || 2345
 
 let flightcollection=null;
 
 async function getFlights(req_data) {
-
     let response = await fetch("https://flightservice.easemytrip.com/EmtAppService/AirAvail_Lights/AirSearchLightFromCloud", {
         "headers": {
           "accept": "application/json, text/plain, */*",
@@ -23,7 +23,8 @@ async function getFlights(req_data) {
       },
       "referrer": "https://flight.easemytrip.com/FlightList/Index?srch=DEL-Delhi-India|BOM-Mumbai-India|07/07/2020&px=1-0-0&cbn=0&ar=undefined&isow=true&isdm=true&lng=&CouponCode=",
       "referrerPolicy": "no-referrer-when-downgrade",
-      "body": "{\"org\":\"DEL\",\"dept\":\"HYD\",\"adt\":\"1\",\"chd\":\"0\",\"inf\":\"0\",\"deptDT\":\"2020-07-07\",\"arrDT\":null,\"isDomestic\":\"true\",\"isOneway\":true,\"airline\":\"undefined\",\"Cabin\":\"0\",\"currCode\":\"INR\",\"appType\":1,\"isSingleView\":false,\"ResType\":1,\"CouponCode\":\"\",\"IpAddress\":\"\",\"userid\":\"\",\"UUID\":\"\"}",
+      "body": "{\"org\":\"" + req_data.origin + "\",\"dept\":\"" + req_data.destination + "\",\"adt\":\"" + req_data.adults + "\",\"chd\":\""+ req_data.children +"\",\"inf\":\""+ req_data.infants + "\",\"deptDT\":\""+ req_data.departureDate +"\",\"arrDT\":null,\"isDomestic\":\""+ req_data.isDomestic + "\",\"isOneway\":"+ req_data.isOneway + ",\"airline\":\""+ req_data.airline + "\",\"Cabin\":\""  + req_data.cabin +  "\",\"currCode\":\""+ req_data.currencyCode +"\",\"appType\":1,\"isSingleView\":false,\"ResType\":1,\"CouponCode\":\"\",\"IpAddress\":\"\",\"userid\":\"\",\"UUID\":\"\"}" ,
+
       "method": "POST",
       "mode": "cors",
       "credentials": "omit"
@@ -36,8 +37,6 @@ async function getFlights(req_data) {
 }
 
 function showRelevantInfo(data) {
-    // console.log(data);
-
     var locationDetails = data.A;
     var flightNames = data.C;
     var locationAndCountryMap = data.Cnty;
@@ -59,6 +58,8 @@ function showRelevantInfo(data) {
     for (flight in data.j[0].s) {
         var obj = {};
         obj['flightName'] = flightNames[data.dctFltDtl[data.j[0].s[flight].b[0].FL[0]].AC];
+        obj['from']=data.SQ[0].org;
+        obj['to'] = data.SQ[0].dept;
         obj['departureDate']= data.SQ[0].deptDT
         obj['arrivalDate']= data.SQ[0].arrDT
         obj['depart'] = data.dctFltDtl[data.j[0].s[flight].b[0].FL[0]].DTM;
@@ -81,17 +82,16 @@ function showRelevantInfo(data) {
     return docs;
 }
 
-
-
-
-
-app.get('/getFlights',function(req,res){
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+    
+app.post('/getFlights',function(req,res){
     MongoClient.connect(DB.URI, function(err,db){
     if(err)
         throw err;
 
     flightcollection=db.db('test').collection('easemytrip_node');
-    getFlights(req.query).then(function(data){
+    getFlights(req.body).then(function(data){
         let docs= showRelevantInfo(data);
         flightcollection.insertMany(docs).then(result=>{
             console.log("Saved to DB!");
