@@ -4,3 +4,6 @@
 
 # venv
 venv/*
+
+easymytrip/node_modules
+easymytrip/config.json
