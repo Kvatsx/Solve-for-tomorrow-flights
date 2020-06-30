@@ -11,6 +11,7 @@ CORS(mod)
 @mod.route('/', methods=['GET'])
 def index():
     # insertData()
+    print(fetchData(fromPlace='DEL', toPlace='BOM'))
     user_collection = mongo.db.discount
     data = user_collection['easemytrip'].find()
     data = list(data)
@@ -26,3 +27,19 @@ def insertData():
     user_collection = mongo.db.discount
     user_collection['easemytrip'].drop()
     user_collection['easemytrip'].insert(data)
+
+"""
+data_dict: Dictionary structure storing the mangodb query output
+        Important Keys:  'from', 'to', 'departureData', 'returnDate', 
+                        'traveller', 'cashCurrency', 'offers'
+"""
+def fetchData(fromPlace, toPlace):
+    user_collection = mongo.db.discount
+    data = user_collection['easemytrip'].find()
+    for record in data:
+        data_dict = record
+        print(data_dict.keys())
+        if (data_dict['from'] == fromPlace and data_dict['to'] == toPlace):
+            return json.dumps(data_dict, default=str)
+        else:
+            return None
