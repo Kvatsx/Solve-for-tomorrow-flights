@@ -4,7 +4,7 @@ const fetch = require("node-fetch");
 const fs = require('fs');
 const app=require('express')();
 const bodyParser=require('body-parser');
-const PORT = process.env.PORT || 2345
+const PORT = 2345
 
 let flightcollection=null;
 
@@ -75,11 +75,8 @@ function showRelevantInfo(data) {
         docs.push(obj);
     }
 
-    console.log(docs);
-    console.log(docs.length)
-
-    
-    return docs;
+    flightList['flights'] = docs;
+    return flightList;
 }
 
 app.use(bodyParser.json());
