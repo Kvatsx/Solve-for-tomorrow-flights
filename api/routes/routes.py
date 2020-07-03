@@ -5,7 +5,7 @@ from api.database import mongo
 import json, requests
 
 # test link
-# http://127.0.0.1:5000/api/easemytrip/from=DEL-Delhi-India&to=BOM-Mumbai-India&dd=2020-07-07&rd=null&tvlr=1-0-0&cl=0&isdm=true&isow=true&airline=undefined
+# http://127.0.0.1:5000/api/easemytrip/from=HYD-Hyderabad-India&to=MAA-Chennai-India&dd=2020-07-22&rd=null&tvlr=1-0-0&cl=0&isdm=true&isow=true&airline=undefined
 
 mod = Blueprint('main', __name__)
 CORS(mod)
@@ -90,7 +90,7 @@ def fetchFlights(obj):
 
     response = requests.post('https://flightservice.easemytrip.com/EmtAppService/AirAvail_Lights/AirSearchLightFromCloud', headers=headers, data=data)
     # json.dump(response.json(), open("data.json", 'w'))
-    print(data)
+    # print(data)
     return showRelevantInfo(response.json())
 
 def showRelevantInfo(data):
@@ -109,7 +109,7 @@ def showRelevantInfo(data):
         'infant': data['inf']
     }
     flightList['cashCurrency'] = data['CC']
-    flightList['offers'] = data['OFR']
+    # flightList['offers'] = data['OFR']
     docs=[]
 
     for flight in range(len(data['j'][0]['s'])):
@@ -121,7 +121,7 @@ def showRelevantInfo(data):
         obj['arrivalDate']= data['SQ'][0]['arrDT']
         obj['depart'] = data['dctFltDtl'][str(data['j'][0]['s'][flight]['b'][0]['FL'][0])]['DTM']
         obj['duration'] = data['j'][0]['s'][flight]['b'][0]['JyTm']
-        # obj['arrive'] = data.dctFltDtl[data.j[0].sflight.b[0].FL.length-1].ATM
+        # obj['arrive'] = data['dctFltDtl'][str(data.j[0]['flight']['b'][0]['FL'][str(data.j[0]['flight']['b'][0]['FL'].lenght-1)]['ATM']
         obj['previousPrice'] =  data['j'][0]['s'][flight]['TF']
         obj['finalPrice'] =  data['j'][0]['s'][flight]['TTDIS']
         obj['couponCode'] =  data['j'][0]['s'][flight]['CC']
